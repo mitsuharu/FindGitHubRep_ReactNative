@@ -1,3 +1,4 @@
+import android.os.Bundle;
 package com.findgithubrep;
 
 import com.facebook.react.ReactActivity;
@@ -12,4 +13,13 @@ public class MainActivity extends ReactActivity {
   protected String getMainComponentName() {
     return "FindGitHubRep";
   }
+
+  /**
+   * https://reactnavigation.org/docs/getting-started/
+   */
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(null);
+  }
+
 }
