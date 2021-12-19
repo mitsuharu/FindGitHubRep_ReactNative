@@ -11,9 +11,9 @@
 import React from 'react'
 import { PersistGate as PersistProvider } from 'redux-persist/integration/react'
 import { Provider as ReduxProvider } from 'react-redux'
-import Home from '@/screen/Home'
 import { initializeRedux } from '@/redux'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import Routes from './routes'
 
 const App = () => {
   const { persistor, store } = initializeRedux()
@@ -22,7 +22,7 @@ const App = () => {
     <SafeAreaProvider>
       <ReduxProvider store={store}>
         <PersistProvider loading={null} persistor={persistor}>
-          <Home />
+          <Routes />
         </PersistProvider>
       </ReduxProvider>
     </SafeAreaProvider>
