@@ -15,6 +15,9 @@ import { initializeRedux } from '@/redux'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import Routes from './routes'
 
+// for json-object-mapper
+import 'reflect-metadata'
+
 const App = () => {
   const { persistor, store } = initializeRedux()
 
