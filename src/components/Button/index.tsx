@@ -16,8 +16,8 @@ type ContentProps = {
   children?: ReactNode
 }
 type Props = ContentProps & {
-  onPress?: (() => void) | null
-  onLongPress?: (() => void) | null
+  onPress?: () => void
+  onLongPress?: () => void
   style?: StyleProp<ViewStyle>
   inactive?: boolean
   accessibilityLabel?: string
