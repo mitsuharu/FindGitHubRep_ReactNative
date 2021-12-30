@@ -1,4 +1,5 @@
 // eslint-disable-next-line max-classes-per-file
+import { makeSteppedArray } from '@/utils/arrays'
 import {
   CacheKey,
   Deserializer,
@@ -40,4 +41,22 @@ export class Repository {
 
   @JsonProperty()
   topics: string[]
+
+  static dummy(id?: number): Repository {
+    const temp = new Repository()
+    temp.id = id ?? 1234
+    temp.name = 'dummy-name-' + String(temp.id)
+    temp.fullName = 'dummy-full-name-' + String(temp.id)
+    temp.url = 'https://github.com/'
+    temp.description = 'dummy-description-' + String(temp.id)
+    temp.owner = User.dummy()
+    temp.stars = 100
+    temp.watchers = 50
+    temp.topics = ['dummy-topic-0', 'dummy-topic-0']
+    return temp
+  }
+
+  static dummyList(length: number): Repository[] {
+    return makeSteppedArray(length).map<Repository>((i) => Repository.dummy(i))
+  }
 }
