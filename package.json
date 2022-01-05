@@ -11,7 +11,7 @@
     "clean": "run-p clean:*",
     "clean:project": "npx react-native-clean-project --keep-node-modules --remove-iOS-build --remove-iOS-pods --remove-android-build --clean-android-project --keep-brew --keep-pods",
     "clean:jest": "jest --clearCache",
-    "test": "cross-env TZ=Asia/Tokyo jest",
+    "test": "jest",
     "lint": "eslint ./src/ --ext .js,.jsx,.ts,.tsx --quiet",
     "pod": "npx pod-install"
   },

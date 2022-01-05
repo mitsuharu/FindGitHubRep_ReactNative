@@ -50,9 +50,15 @@ export class Repository {
     temp.url = 'https://github.com/'
     temp.description = 'dummy-description-' + String(temp.id)
     temp.owner = User.dummy()
-    temp.stars = 100
-    temp.watchers = 50
-    temp.topics = ['dummy-topic-0', 'dummy-topic-1', 'dummy-topic-2', 'dummy-topic-4']
+    temp.stars = 1000
+    temp.watchers = 500
+    temp.topics = [
+      'dummy-topic-0',
+      'dummy-topic-1',
+      'dummy-topic-2',
+      'dummy-topic-3',
+      'dummy-topic-4',
+    ]
     return temp
   }
 

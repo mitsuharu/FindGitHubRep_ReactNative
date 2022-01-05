@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native'
+import { StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native'
 import { styleType } from '@/utils/styles'
 import { Repository } from '@/api/github/Repository'
 import { Button } from '@/components/Button'
@@ -12,7 +12,7 @@ type Props = {
 type ComponentProps = Props & {}
 
 const Component: React.FC<ComponentProps> = ({ repository, onPress }) => {
-  const { name, description, stars, watchers, topics, owner } = repository
+  const { name, description, stars, watchers, owner } = repository
   return (
     <Button style={styles.container} onPress={() => onPress(repository)}>
       <View style={[styles.row, styles.marginBottom]}>
@@ -31,14 +31,11 @@ const Component: React.FC<ComponentProps> = ({ repository, onPress }) => {
       )}
       <View style={[styles.row, styles.marginBottom]}>
         <Text style={styles.count}>⭐️</Text>
-        <Text style={styles.count}>{stars}</Text>
+        <Text style={styles.count}>{stars.toLocaleString()}</Text>
         <View style={styles.spacer} />
         <Text style={styles.count}>👀</Text>
-        <Text style={styles.count}>{watchers}</Text>
+        <Text style={styles.count}>{watchers.toLocaleString()}</Text>
       </View>
-      <ScrollView horizontal style={styles.topicScroll}>
-        {topics.map((t) => <Text style={styles.topic} key={t}>{t}</Text>)}
-      </ScrollView>
     </Button>
   )
 }
@@ -75,17 +72,6 @@ const styles = StyleSheet.create({
   }),
   count: styleType<TextStyle>({
     fontWeight: 'bold',
-  }),
-  topicScroll: styleType<ViewStyle>({
-  }),
-  topic: styleType<TextStyle>({
-    fontWeight: 'normal',
-    marginLeft: 4,
-    // backgroundColor: "gray",
-    borderRadius: 4,
-    borderWidth: 1,
-    paddingVertical: 1,
-    paddingHorizontal: 4,
   }),
   spacer: styleType<ViewStyle>({
     width: 10,
