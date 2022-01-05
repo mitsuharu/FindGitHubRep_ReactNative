@@ -7,6 +7,7 @@ import SearchBar from 'react-native-search-bar'
 import { Repository } from '@/api/github/Repository'
 import { RepItem } from './RepItem'
 import { ItemSeparator } from '@/components/List/Separator'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 type Props = {}
 type ComponentProps = Props & {
@@ -42,6 +43,10 @@ const Component: React.FC<ComponentProps> = ({
     )
   }, [onChangeText, searchText])
 
+  const ListFooterComponent = useMemo(() => {
+    return <SafeAreaView edges={['bottom']} />
+  }, [])
+
   return (
     <FlatList
       style={styles.container}
@@ -50,6 +55,7 @@ const Component: React.FC<ComponentProps> = ({
       keyExtractor={keyExtractor}
       ItemSeparatorComponent={ItemSeparator}
       ListHeaderComponent={ListHeaderComponent}
+      ListFooterComponent={ListFooterComponent}
       onEndReached={() => {}}
     />
   )

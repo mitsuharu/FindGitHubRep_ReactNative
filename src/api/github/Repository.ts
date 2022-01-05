@@ -52,7 +52,7 @@ export class Repository {
     temp.owner = User.dummy()
     temp.stars = 100
     temp.watchers = 50
-    temp.topics = ['dummy-topic-0', 'dummy-topic-0']
+    temp.topics = ['dummy-topic-0', 'dummy-topic-1', 'dummy-topic-2', 'dummy-topic-4']
     return temp
   }
 
