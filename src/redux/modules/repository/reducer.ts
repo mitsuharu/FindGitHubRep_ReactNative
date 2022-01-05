@@ -13,15 +13,15 @@ const baseReducer = reducerWithInitialState(initialState)
     ...state,
     keyword: keyword,
     page: page ? 1 : state.page,
-    total: page === 1 ? 0 : state.total,
-    hasNext: page === 1 ? true : state.hasNext,
-    items: page === 1 ? [] : state.items,
+    total: page ? 0 : state.total,
+    hasNext: page ? true : state.hasNext,
+    items: page ? [] : state.items,
     isRequesting: true,
     error: null,
   }))
   .case(fetchRepositoriesSucceeded, (state, { result }) => {
     const items = state.items.concat(result.items)
-    const hasNext = items.length <= result.total
+    const hasNext = items.length < result.total
     return {
       ...state,
       isRequesting: false,

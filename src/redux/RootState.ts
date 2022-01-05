@@ -1,7 +1,9 @@
 import { CounterState } from '@/redux/modules/counter/state'
+import { RepositoryState } from './modules/repository/state'
 
 export interface RootState {
   counter: CounterState
+  repository: RepositoryState
 }
 
 // typescript definition
