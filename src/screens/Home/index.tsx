@@ -48,8 +48,8 @@ const Component: React.FC<ComponentProps> = ({
     [onPress],
   )
 
-  const keyExtractor = useCallback((item: Repository, index: number) => {
-    return item.id.toString() + '-' + item.name + '-' + index.toString()
+  const keyExtractor = useCallback((item: Repository) => {
+    return item.id.toString() + '-' + item.name
   }, [])
 
   const ListHeaderComponent = useMemo(() => {
@@ -93,6 +93,7 @@ const Container: React.FC<Props> = (props) => {
     (repository: Repository) => {
       // navigation.navigate(MainName.Detail)
 
+      console.log(`onPress ${repository.name}`)
       dispatch(enqueueToast({ message: repository.name }))
     },
     [dispatch],
@@ -113,7 +114,7 @@ const Container: React.FC<Props> = (props) => {
     dispatch(fetchRepositoriesMore())
   }, [dispatch])
 
-  const items: Repository[] = useSelector(selectRepositoryItems)
+  const items: Repository[] = Repository.dummyList(10) // useSelector(selectRepositoryItems)
   const isRequesting = useSelector(selectRepositoryIsRequesting)
 
   useEffect(() => {

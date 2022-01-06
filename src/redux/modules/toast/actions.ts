@@ -10,3 +10,6 @@ export const dequeueToast =
   actionCreator<{ createdAt: number }>('DEQUEUE_TOAST')
 
 export const clearToast = actionCreator('CLEAR_TOAST')
+
+export const _onHideToast =
+  actionCreator<{ createdAt: number }>('ON_HIDE_TOAST')
