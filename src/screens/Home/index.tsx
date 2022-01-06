@@ -1,5 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { FlatList, ListRenderItem, StyleSheet, ViewStyle } from 'react-native'
+import {
+  ActivityIndicator,
+  FlatList,
+  ListRenderItem,
+  StyleSheet,
+  ViewStyle,
+} from 'react-native'
 import { styleType } from '@/utils/styles'
 import { useNavigation } from '@react-navigation/native'
 import { MainName } from '@/routes/main.constraint'
@@ -14,7 +20,10 @@ import {
   fetchRepositories,
   fetchRepositoriesMore,
 } from '@/redux/modules/repository/actions'
-import { selectRepositoryItems } from '@/redux/modules/repository/selectors'
+import {
+  selectRepositoryIsRequesting,
+  selectRepositoryItems,
+} from '@/redux/modules/repository/selectors'
 
 type Props = {}
 type ComponentProps = Props & {
@@ -23,6 +32,7 @@ type ComponentProps = Props & {
   searchText: string
   onChangeText: (text: string) => void
   onEndReached: () => void
+  isRequesting: boolean
 }
 
 const Component: React.FC<ComponentProps> = ({
@@ -31,6 +41,7 @@ const Component: React.FC<ComponentProps> = ({
   searchText,
   onChangeText,
   onEndReached,
+  isRequesting,
 }) => {
   const renderItem = useCallback<ListRenderItem<Repository>>(
     ({ item }) => <RepItem repository={item} onPress={onPress} />,
@@ -53,8 +64,12 @@ const Component: React.FC<ComponentProps> = ({
   }, [onChangeText, searchText])
 
   const ListFooterComponent = useMemo(() => {
-    return <SafeAreaView edges={['bottom']} />
-  }, [])
+    return (
+      <SafeAreaView edges={['bottom']}>
+        {isRequesting && <ActivityIndicator style={styles.activityIndicator} />}
+      </SafeAreaView>
+    )
+  }, [isRequesting])
 
   return (
     <FlatList
@@ -99,6 +114,7 @@ const Container: React.FC<Props> = (props) => {
   }, [dispatch])
 
   const items: Repository[] = useSelector(selectRepositoryItems)
+  const isRequesting = useSelector(selectRepositoryIsRequesting)
 
   useEffect(() => {
     console.log(`Home#items: ${items.length}`)
@@ -112,6 +128,7 @@ const Container: React.FC<Props> = (props) => {
       searchText={searchText}
       onChangeText={onChangeText}
       onEndReached={onEndReached}
+      isRequesting={isRequesting}
     />
   )
 }
@@ -125,5 +142,8 @@ const styles = StyleSheet.create({
   searchBar: styleType<ViewStyle>({
     width: '100%',
     height: 60,
+  }),
+  activityIndicator: styleType<ViewStyle>({
+    margin: 16,
   }),
 })
