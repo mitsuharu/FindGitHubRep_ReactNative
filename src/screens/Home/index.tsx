@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { FlatList, ListRenderItem, StyleSheet, ViewStyle } from 'react-native'
 import { styleType } from '@/utils/styles'
 import { useNavigation } from '@react-navigation/native'
@@ -8,8 +8,13 @@ import { Repository } from '@/api/github/Repository'
 import { RepItem } from './RepItem'
 import { ItemSeparator } from '@/components/List/Separator'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { enqueueToast } from '@/redux/modules/toast/actions'
+import {
+  fetchRepositories,
+  fetchRepositoriesMore,
+} from '@/redux/modules/repository/actions'
+import { selectRepositoryItems } from '@/redux/modules/repository/selectors'
 
 type Props = {}
 type ComponentProps = Props & {
@@ -17,6 +22,7 @@ type ComponentProps = Props & {
   onPress: (repository: Repository) => void
   searchText: string
   onChangeText: (text: string) => void
+  onEndReached: () => void
 }
 
 const Component: React.FC<ComponentProps> = ({
@@ -24,14 +30,15 @@ const Component: React.FC<ComponentProps> = ({
   onPress,
   searchText,
   onChangeText,
+  onEndReached,
 }) => {
   const renderItem = useCallback<ListRenderItem<Repository>>(
     ({ item }) => <RepItem repository={item} onPress={onPress} />,
     [onPress],
   )
 
-  const keyExtractor = useCallback((item: Repository) => {
-    return item.id.toString()
+  const keyExtractor = useCallback((item: Repository, index: number) => {
+    return item.id.toString() + '-' + item.name + '-' + index.toString()
   }, [])
 
   const ListHeaderComponent = useMemo(() => {
@@ -58,7 +65,7 @@ const Component: React.FC<ComponentProps> = ({
       ItemSeparatorComponent={ItemSeparator}
       ListHeaderComponent={ListHeaderComponent}
       ListFooterComponent={ListFooterComponent}
-      onEndReached={() => {}}
+      onEndReached={onEndReached}
     />
   )
 }
@@ -78,11 +85,24 @@ const Container: React.FC<Props> = (props) => {
 
   const [searchText, setSearchText] = useState<string>('')
 
-  const onChangeText = useCallback((text: string) => {
-    setSearchText(text)
-  }, [])
+  const onChangeText = useCallback(
+    (text: string) => {
+      console.log(`onChangeText ${text}`)
+      setSearchText(text)
+      dispatch(fetchRepositories({ keyword: text }))
+    },
+    [dispatch],
+  )
 
-  const items: Repository[] = Repository.dummyList(10)
+  const onEndReached = useCallback(() => {
+    dispatch(fetchRepositoriesMore())
+  }, [dispatch])
+
+  const items: Repository[] = useSelector(selectRepositoryItems)
+
+  useEffect(() => {
+    console.log(`Home#items: ${items.length}`)
+  }, [items])
 
   return (
     <Component
@@ -91,6 +111,7 @@ const Container: React.FC<Props> = (props) => {
       onPress={onPress}
       searchText={searchText}
       onChangeText={onChangeText}
+      onEndReached={onEndReached}
     />
   )
 }

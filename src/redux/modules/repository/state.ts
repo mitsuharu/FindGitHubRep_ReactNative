@@ -14,7 +14,7 @@ export const initialState: Readonly<RepositoryState> = {
   keyword: null,
   page: 0,
   total: 0,
-  hasNext: false,
+  hasNext: true,
   items: [],
   error: null,
   isRequesting: false,
