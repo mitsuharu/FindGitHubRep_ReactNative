@@ -12,9 +12,13 @@ type Props = {
 type ComponentProps = Props & {}
 
 const Component: React.FC<ComponentProps> = ({ repository, onPress }) => {
-  const { name, description, stars, watchers, owner } = repository
+  const { id, name, description, stars, watchers, owner } = repository
   return (
-    <Button style={styles.container} onPress={() => onPress(repository)}>
+    <Button
+      style={styles.container}
+      onPress={() => onPress(repository)}
+      key={id}
+    >
       <View style={[styles.row, styles.marginBottom]}>
         <FastImage
           style={styles.ownerImage}

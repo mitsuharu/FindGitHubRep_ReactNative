@@ -4,7 +4,7 @@ import createSagaMiddleware from 'redux-saga'
 import { RootState } from '@/redux/RootState'
 import { rootSaga } from '@/redux/saga'
 import { Persistor } from 'redux-persist/es/types'
-import { counterReducer } from './internal'
+import { toastReducer, repositoryReducer } from './internal'
 
 let store: Store
 let persistor: Persistor
@@ -14,7 +14,8 @@ export function initializeRedux() {
 
   if (store == null || persistor == null) {
     const reducer = combineReducers<RootState>({
-      counter: counterReducer,
+      toast: toastReducer,
+      repository: repositoryReducer,
     })
 
     const sagaMiddleware = createSagaMiddleware({

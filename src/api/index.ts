@@ -16,7 +16,7 @@ export const fetchRepositories: FetchRepositoriesType = async ({
     url.searchParams.set('q', keyword + ' in:name')
     url.searchParams.set('page', String(page ?? 1))
     url.searchParams.set('sort', 'stars')
-    url.searchParams.set('per_page', '20')
+    url.searchParams.set('per_page', '10')
 
     const res = await fetch(url.toString(), {
       method: 'GET',

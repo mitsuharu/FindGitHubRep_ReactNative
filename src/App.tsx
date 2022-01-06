@@ -14,6 +14,7 @@ import { Provider as ReduxProvider } from 'react-redux'
 import { initializeRedux } from '@/redux'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import Routes from './routes'
+import { GlobalToast } from '@/components/GlobalToast'
 
 // for json-object-mapper
 import 'reflect-metadata'
@@ -26,6 +27,7 @@ const App = () => {
       <ReduxProvider store={store}>
         <PersistProvider loading={null} persistor={persistor}>
           <Routes />
+          <GlobalToast />
         </PersistProvider>
       </ReduxProvider>
     </SafeAreaProvider>
