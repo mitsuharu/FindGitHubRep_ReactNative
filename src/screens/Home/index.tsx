@@ -8,6 +8,8 @@ import { Repository } from '@/api/github/Repository'
 import { RepItem } from './RepItem'
 import { ItemSeparator } from '@/components/List/Separator'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { useDispatch } from 'react-redux'
+import { enqueueToast } from '@/redux/modules/toast/actions'
 
 type Props = {}
 type ComponentProps = Props & {
@@ -63,11 +65,15 @@ const Component: React.FC<ComponentProps> = ({
 
 const Container: React.FC<Props> = (props) => {
   const navigation = useNavigation()
+  const dispatch = useDispatch()
+
   const onPress = useCallback(
     (repository: Repository) => {
-      navigation.navigate(MainName.Detail)
+      // navigation.navigate(MainName.Detail)
+
+      dispatch(enqueueToast({ message: repository.name }))
     },
-    [navigation],
+    [dispatch],
   )
 
   const [searchText, setSearchText] = useState<string>('')

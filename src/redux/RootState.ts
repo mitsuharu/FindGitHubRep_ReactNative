@@ -1,8 +1,8 @@
-import { CounterState } from '@/redux/modules/counter/state'
+import { ToastState } from '@/redux/modules/toast/state'
 import { RepositoryState } from './modules/repository/state'
 
 export interface RootState {
-  counter: CounterState
+  toast: ToastState
   repository: RepositoryState
 }
 

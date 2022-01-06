@@ -14,4 +14,4 @@ export const fetchRepositoriesFailed = actionCreator<{ error: Error }>(
   'FETCH_REPOSITORIES_FAILED',
 )
 
-export const fetchRepositoriesMore = actionCreator('FETCH_REPOSITORIES')
+export const fetchRepositoriesMore = actionCreator('FETCH_REPOSITORIES_MORE')
