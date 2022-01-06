@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import {
   ActivityIndicator,
   FlatList,
   ListRenderItem,
   StyleSheet,
+  View,
   ViewStyle,
 } from 'react-native'
 import { styleType } from '@/utils/styles'
@@ -66,7 +67,9 @@ const Component: React.FC<ComponentProps> = ({
   const ListFooterComponent = useMemo(() => {
     return (
       <SafeAreaView edges={['bottom']}>
-        {isRequesting && <ActivityIndicator style={styles.activityIndicator} />}
+        <View style={styles.footer}>
+          {isRequesting && <ActivityIndicator />}
+        </View>
       </SafeAreaView>
     )
   }, [isRequesting])
@@ -91,12 +94,12 @@ const Container: React.FC<Props> = (props) => {
 
   const onPress = useCallback(
     (repository: Repository) => {
-      // navigation.navigate(MainName.Detail)
-
       console.log(`onPress ${repository.name}`)
       dispatch(enqueueToast({ message: repository.name }))
+
+      navigation.navigate(MainName.Detail)
     },
-    [dispatch],
+    [dispatch, navigation],
   )
 
   const [searchText, setSearchText] = useState<string>('')
@@ -114,12 +117,8 @@ const Container: React.FC<Props> = (props) => {
     dispatch(fetchRepositoriesMore())
   }, [dispatch])
 
-  const items: Repository[] = Repository.dummyList(10) // useSelector(selectRepositoryItems)
+  const items: Repository[] = useSelector(selectRepositoryItems)
   const isRequesting = useSelector(selectRepositoryIsRequesting)
-
-  useEffect(() => {
-    console.log(`Home#items: ${items.length}`)
-  }, [items])
 
   return (
     <Component
@@ -144,7 +143,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 60,
   }),
-  activityIndicator: styleType<ViewStyle>({
-    margin: 16,
+  footer: styleType<ViewStyle>({
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
   }),
 })

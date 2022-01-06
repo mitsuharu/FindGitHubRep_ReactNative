@@ -11,9 +11,6 @@ import { initialState } from './state'
 const baseReducer = reducerWithInitialState(initialState)
   .case(fetchRepositories, (state, { keyword, page }) => {
     const nextPage = page ? page : state.page
-    console.log(
-      `repositoryReducer#fetchRepositories page: ${page}, nextPage: ${nextPage}`,
-    )
     return {
       ...state,
       keyword: keyword,
@@ -28,11 +25,6 @@ const baseReducer = reducerWithInitialState(initialState)
   .case(fetchRepositoriesSucceeded, (state, { result }) => {
     const items = [...state.items, ...result.items]
     const hasNext = items.length < result.total
-
-    console.log(
-      `repositoryReducer#fetchRepositoriesSucceeded state.items: ${state.items.length}, result.items: ${result.items.length}, items: ${items.length}`,
-    )
-
     return {
       ...state,
       isRequesting: false,
