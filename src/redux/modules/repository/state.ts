@@ -12,7 +12,7 @@ export type RepositoryState = {
 
 export const initialState: Readonly<RepositoryState> = {
   keyword: null,
-  page: 0,
+  page: 1,
   total: 0,
   hasNext: true,
   items: [],

@@ -10,7 +10,7 @@ import { initialState } from './state'
 
 const baseReducer = reducerWithInitialState(initialState)
   .case(fetchRepositories, (state, { keyword, page }) => {
-    const nextPage = page ? 1 : state.page
+    const nextPage = page ? page : state.page
     console.log(
       `repositoryReducer#fetchRepositories page: ${page}, nextPage: ${nextPage}`,
     )
