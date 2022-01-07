@@ -47,7 +47,7 @@ export class Repository {
     temp.id = id ?? 1234
     temp.name = 'dummy-name-' + String(temp.id)
     temp.fullName = 'dummy-full-name-' + String(temp.id)
-    temp.url = 'https://github.com/'
+    temp.url = 'https://example.com/'
     temp.description = 'dummy-description-' + String(temp.id)
     temp.owner = User.dummy()
     temp.stars = 1000
