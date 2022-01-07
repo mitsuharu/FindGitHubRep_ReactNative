@@ -16,7 +16,6 @@ import { RepItem } from './RepItem'
 import { ItemSeparator } from '@/components/List/Separator'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useDispatch, useSelector } from 'react-redux'
-import { enqueueToast } from '@/redux/modules/toast/actions'
 import {
   fetchRepositories,
   fetchRepositoriesMore,
@@ -94,19 +93,15 @@ const Container: React.FC<Props> = (props) => {
 
   const onPress = useCallback(
     (repository: Repository) => {
-      console.log(`onPress ${repository.name}`)
-      dispatch(enqueueToast({ message: repository.name }))
-
       navigation.navigate(MainName.Detail, { repository: repository })
     },
-    [dispatch, navigation],
+    [navigation],
   )
 
   const [searchText, setSearchText] = useState<string>('')
 
   const onChangeText = useCallback(
     (text: string) => {
-      console.log(`onChangeText ${text}`)
       setSearchText(text)
       dispatch(fetchRepositories({ keyword: text }))
     },
