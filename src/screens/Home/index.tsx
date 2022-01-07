@@ -3,7 +3,7 @@ import {
   ActivityIndicator,
   FlatList,
   ListRenderItem,
-  StyleSheet,
+  useColorScheme,
   View,
   ViewStyle,
 } from 'react-native'
@@ -24,6 +24,8 @@ import {
   selectRepositoryIsRequesting,
   selectRepositoryItems,
 } from '@/redux/modules/repository/selectors'
+import { makeStyles } from 'react-native-swag-styles'
+import { COLOR } from '@/CONSTANTS/COLOR'
 
 type Props = {}
 type ComponentProps = Props & {
@@ -43,6 +45,8 @@ const Component: React.FC<ComponentProps> = ({
   onEndReached,
   isRequesting,
 }) => {
+  const styles = useStyles()
+
   const renderItem = useCallback<ListRenderItem<Repository>>(
     ({ item }) => <RepItem repository={item} onPress={onPress} />,
     [onPress],
@@ -61,7 +65,7 @@ const Component: React.FC<ComponentProps> = ({
         style={styles.searchBar}
       />
     )
-  }, [onChangeText, searchText])
+  }, [onChangeText, searchText, styles])
 
   const ListFooterComponent = useMemo(() => {
     return (
@@ -71,7 +75,7 @@ const Component: React.FC<ComponentProps> = ({
         </View>
       </SafeAreaView>
     )
-  }, [isRequesting])
+  }, [isRequesting, styles])
 
   return (
     <FlatList
@@ -130,9 +134,10 @@ const Container: React.FC<Props> = (props) => {
 
 export { Container as Home }
 
-const styles = StyleSheet.create({
+const useStyles = makeStyles(useColorScheme, (colorScheme) => ({
   container: styleType<ViewStyle>({
     flex: 1,
+    backgroundColor: COLOR(colorScheme).BACKGROUND.SECONDARY,
   }),
   searchBar: styleType<ViewStyle>({
     width: '100%',
@@ -143,4 +148,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   }),
-})
+}))

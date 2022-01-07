@@ -1,11 +1,12 @@
 import React, { useLayoutEffect, useMemo, useState } from 'react'
-import { StyleSheet, View, ViewStyle } from 'react-native'
+import { useColorScheme, View, ViewStyle } from 'react-native'
 import { styleType } from '@/utils/styles'
 import { WebView } from 'react-native-webview'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { MainParams } from '@/routes/main.params'
 import { LoadingSpinner } from '@/components/LoadingSpinner'
 import { ShareButton } from '@/components/Button/ShareButton'
+import { makeStyles } from 'react-native-swag-styles'
 
 type ParamsProps = RouteProp<MainParams, 'Detail'>
 
@@ -21,6 +22,8 @@ const Component: React.FC<ComponentProps> = ({
   isLoading,
   setIsLoading,
 }) => {
+  const styles = useStyles()
+
   return (
     <View style={styles.container}>
       <WebView
@@ -56,11 +59,11 @@ const Container: React.FC<Props> = (props) => {
 
 export { Container as Detail }
 
-const styles = StyleSheet.create({
+const useStyles = makeStyles(useColorScheme, (_colorScheme) => ({
   container: styleType<ViewStyle>({
     flex: 1,
   }),
   webView: styleType<ViewStyle>({
     flex: 1,
   }),
-})
+}))

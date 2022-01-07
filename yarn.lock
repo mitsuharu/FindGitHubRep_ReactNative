@@ -3463,6 +3463,11 @@ fast-levenshtein@^2.0.6, fast-levenshtein@~2.0.6:
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
 
+fast-memoize@^2.5.2:
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/fast-memoize/-/fast-memoize-2.5.2.tgz#79e3bb6a4ec867ea40ba0e7146816f6cdce9b57e"
+  integrity sha512-Ue0LwpDYErFbmNnZSF0UH6eImUwDmogUO1jyE+JbN2gsQz/jICm1Ve7t9QT0rNSsfJt+Hs4/S3GnsDVjL4HVrw==
+
 fastq@^1.6.0:
   version "1.13.0"
   resolved "https://registry.yarnpkg.com/fastq/-/fastq-1.13.0.tgz#616760f88a7526bdfc596b7cab8c18938c36b98c"
@@ -6219,6 +6224,13 @@ react-native-search-bar@^3.5.1:
   integrity sha512-L+y2gQZstApb2DavE8se6Mzj3CgxZiHxM0DezAdT4kb6+kV4+WeTN8jPxvrP6zgwbGcjuYKaHrASKnBmhuWmhA==
   dependencies:
     prop-types "^15.5.10"
+
+react-native-swag-styles@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/react-native-swag-styles/-/react-native-swag-styles-0.2.2.tgz#8214e098e794e5b04f7fded93a2b79af22869c6e"
+  integrity sha512-KvoDLD164h0Pk32kmF9ZR/m8HtDRTkfkPTkePxytrUm92ycZcYVjKavGim5wfmf+qqg2BpsU59u3FMG5ooukoA==
+  dependencies:
+    fast-memoize "^2.5.2"
 
 react-native-toast-message@^2.1.1:
   version "2.1.1"
