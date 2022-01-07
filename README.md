@@ -18,6 +18,15 @@ FindGitHubRep_ReactNative
 - Node.js
 	- 16.13.0
 
+
+```shell
+% yarn
+% yarn start
+% yarn pod
+% yarn ios
+% yarn android
+```
+
 ## 選定アーキテクチャ
 
 - Redux Saga
