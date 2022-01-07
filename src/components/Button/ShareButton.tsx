@@ -12,6 +12,7 @@ import { styleType } from '@/utils/styles'
 import { useDispatch } from 'react-redux'
 import { enqueueToast } from '@/redux/modules/toast/actions'
 import { Button } from './index'
+import { makeStyles } from 'react-native-swag-styles'
 
 type Props = {
   title: string
@@ -22,6 +23,7 @@ type ComponentProps = Props & {
 }
 
 const Component: React.FC<ComponentProps> = ({ onPress }) => {
+  const styles = useStyles()
   return (
     <Button style={styles.container} onPress={onPress}>
       <Text style={styles.text}>share</Text>
@@ -61,7 +63,7 @@ const Container: React.FC<Props> = (props) => {
 
 export { Container as ShareButton }
 
-const styles = StyleSheet.create({
+const useStyles = makeStyles(() => ({
   container: styleType<ViewStyle>({
     alignItems: 'center',
     justifyContent: 'center',
@@ -74,4 +76,4 @@ const styles = StyleSheet.create({
     padding: 2,
     color: 'black',
   }),
-})
+}))

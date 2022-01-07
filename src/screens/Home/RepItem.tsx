@@ -1,9 +1,11 @@
 import React from 'react'
-import { StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native'
+import { Text, TextStyle, useColorScheme, View, ViewStyle } from 'react-native'
 import { styleType } from '@/utils/styles'
 import { Repository } from '@/api/github/Repository'
 import { Button } from '@/components/Button'
 import FastImage, { ImageStyle } from 'react-native-fast-image'
+import { makeStyles } from 'react-native-swag-styles'
+import { COLOR } from '@/CONSTANTS/COLOR'
 
 type Props = {
   repository: Repository
@@ -12,6 +14,7 @@ type Props = {
 type ComponentProps = Props & {}
 
 const Component: React.FC<ComponentProps> = ({ repository, onPress }) => {
+  const styles = useStyles()
   const { id, name, description, stars, watchers, owner } = repository
   return (
     <Button
@@ -50,14 +53,15 @@ const Container: React.FC<Props> = (props) => {
 
 export { Container as RepItem }
 
-const styles = StyleSheet.create({
+const useStyles = makeStyles(useColorScheme, (colorScheme) => ({
   container: styleType<ViewStyle>({
     width: '100%',
     minHeight: 44,
-    backgroundColor: 'white',
+    backgroundColor: COLOR(colorScheme).BACKGROUND.PRIMARY,
     padding: 16,
   }),
   ownerName: styleType<TextStyle>({
+    color: COLOR(colorScheme).TEXT.PRIMARY,
     fontWeight: 'normal',
   }),
   ownerImage: styleType<ImageStyle>({
@@ -66,16 +70,19 @@ const styles = StyleSheet.create({
     marginRight: 4,
   }),
   repName: styleType<TextStyle>({
+    color: COLOR(colorScheme).TEXT.PRIMARY,
     fontWeight: 'bold',
   }),
   description: styleType<TextStyle>({
+    color: COLOR(colorScheme).TEXT.SECONDARY,
     fontWeight: 'normal',
   }),
   row: styleType<ViewStyle>({
     flexDirection: 'row',
   }),
   count: styleType<TextStyle>({
-    fontWeight: 'bold',
+    color: COLOR(colorScheme).TEXT.PRIMARY,
+    fontWeight: 'normal',
   }),
   spacer: styleType<ViewStyle>({
     width: 10,
@@ -83,4 +90,4 @@ const styles = StyleSheet.create({
   marginBottom: styleType<ViewStyle>({
     marginBottom: 4,
   }),
-})
+}))

@@ -1,6 +1,7 @@
 import { styleType } from '@/utils/styles'
 import React, { memo } from 'react'
 import { Insets, StyleSheet, View, ViewStyle } from 'react-native'
+import { makeStyles } from 'react-native-swag-styles'
 
 const borderInset: Required<Insets> = {
   top: 0,
@@ -15,6 +16,7 @@ type ComponentProps = Props & {
 }
 
 const Component: React.FC<ComponentProps> = ({ hasPaddingLeft }) => {
+  const styles = useStyles()
   return (
     <View style={styles.separator}>
       <View
@@ -32,7 +34,7 @@ export const SectionSeparator: React.FC<Props> = memo((props) => (
   <Component {...props} hasPaddingLeft={false} />
 ))
 
-const styles = StyleSheet.create({
+const useStyles = makeStyles(() => ({
   separator: styleType<ViewStyle>({
     width: '100%',
     height: StyleSheet.hairlineWidth,
@@ -50,4 +52,4 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     marginRight: 0,
   }),
-})
+}))
