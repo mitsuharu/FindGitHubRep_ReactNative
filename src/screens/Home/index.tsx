@@ -97,7 +97,7 @@ const Container: React.FC<Props> = (props) => {
       console.log(`onPress ${repository.name}`)
       dispatch(enqueueToast({ message: repository.name }))
 
-      navigation.navigate(MainName.Detail)
+      navigation.navigate(MainName.Detail, { repository: repository })
     },
     [dispatch, navigation],
   )

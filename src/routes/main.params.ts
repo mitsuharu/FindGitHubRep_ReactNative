@@ -1,4 +1,6 @@
+import { Repository } from '@/api/github/Repository'
+
 export type MainParams = {
   Home: undefined
-  Detail: undefined
+  Detail: { repository: Repository }
 }
