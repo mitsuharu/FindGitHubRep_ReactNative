@@ -12,6 +12,7 @@ import {
   selectRepositoryKeyword,
   selectRepositoryPage,
 } from '../selectors'
+import { enqueueToast } from '../../toast/actions'
 
 export function* fetchRepositoriesSaga({
   payload: { keyword, page },
@@ -27,6 +28,7 @@ export function* fetchRepositoriesSaga({
     console.warn(`fetchRepositoriesSaga`, e)
     if (e instanceof Error) {
       yield put(fetchRepositoriesFailed({ error: e }))
+      yield put(enqueueToast({ message: e.message }))
     }
   }
 }
