@@ -27,6 +27,11 @@ FindGitHubRep_ReactNative
 % yarn android
 ```
 
+### Android に関して
+
+- 実機での動作を確認した
+-  シミュレーターでの動作はビルドが失敗するため、未確認。
+
 ## 選定アーキテクチャ
 
 - Redux Saga
