@@ -26,21 +26,22 @@ type ComponentProps = Props & {
   items: Repository[]
   onPress: (repository: Repository) => void
   searchText: string
-  onChangeText: (text: string) => void
+  onSearchButtonPress?: (text: string) => void
+  onChangeText?: (text: string) => void
   onEndReached: () => void
-  isRequesting: boolean
-  searchBarRef: React.LegacyRef<SearchBar> | undefined
+  isLoading: boolean
 }
 
 const Component: React.FC<ComponentProps> = ({
   items,
   onPress,
   searchText,
+  onSearchButtonPress,
   onChangeText,
   onEndReached,
-  isRequesting,
-  searchBarRef,
+  isLoading,
 }) => {
+  const searchBarRef = useRef<SearchBar | null>(null)
   const styles = useStyles()
 
   const renderItem = useCallback<ListRenderItem<Repository>>(
@@ -57,22 +58,24 @@ const Component: React.FC<ComponentProps> = ({
       <SearchBar
         placeholder="Search"
         text={searchText}
+        onSearchButtonPress={(text) => {
+          searchBarRef.current?.unFocus()
+          onSearchButtonPress?.(text)
+        }}
         onChangeText={onChangeText}
         style={styles.searchBar}
         ref={searchBarRef}
       />
     )
-  }, [onChangeText, searchBarRef, searchText, styles])
+  }, [onChangeText, onSearchButtonPress, searchText, styles.searchBar])
 
   const ListFooterComponent = useMemo(() => {
     return (
       <SafeAreaView edges={['bottom']}>
-        <View style={styles.footer}>
-          {isRequesting && <ActivityIndicator />}
-        </View>
+        <View style={styles.footer}>{isLoading && <ActivityIndicator />}</View>
       </SafeAreaView>
     )
-  }, [isRequesting, styles])
+  }, [isLoading, styles])
 
   return (
     <FlatList
@@ -92,19 +95,17 @@ const Container: React.FC<Props> = (props) => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
   const [keyword, setKeyword] = useState<string>('')
-  const searchBarRef = useRef<SearchBar | null>(null)
 
   const { items, loadMore, isLoading, error } = useSearchRepository(keyword)
 
   const onPress = useCallback(
     (repository: Repository) => {
-      searchBarRef.current?.unFocus()
       navigation.navigate(MainName.Detail, { repository: repository })
     },
     [navigation],
   )
 
-  const onChangeText = useCallback((text: string) => {
+  const onSearchButtonPress = useCallback((text: string) => {
     setKeyword(text)
   }, [])
 
@@ -125,10 +126,9 @@ const Container: React.FC<Props> = (props) => {
       items={items}
       onPress={onPress}
       searchText={keyword}
-      onChangeText={onChangeText}
+      onSearchButtonPress={onSearchButtonPress}
       onEndReached={onEndReached}
-      isRequesting={isLoading}
-      searchBarRef={searchBarRef}
+      isLoading={isLoading}
     />
   )
 }
