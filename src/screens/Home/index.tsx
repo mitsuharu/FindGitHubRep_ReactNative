@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   ActivityIndicator,
   FlatList,
@@ -15,36 +15,33 @@ import { Repository } from '@/api/github/Repository'
 import { RepItem } from './RepItem'
 import { ItemSeparator } from '@/components/List/Separator'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useDispatch, useSelector } from 'react-redux'
-import {
-  fetchRepositories,
-  fetchRepositoriesMore,
-} from '@/redux/modules/repository/actions'
-import {
-  selectRepositoryIsRequesting,
-  selectRepositoryItems,
-} from '@/redux/modules/repository/selectors'
+import { useDispatch } from 'react-redux'
 import { makeStyles } from 'react-native-swag-styles'
 import { COLOR } from '@/CONSTANTS/COLOR'
+import { useSearchRepository } from './hooks/useSearchRepository'
+import { enqueueToast } from '@/redux/modules/toast/actions'
 
 type Props = {}
 type ComponentProps = Props & {
   items: Repository[]
   onPress: (repository: Repository) => void
   searchText: string
-  onChangeText: (text: string) => void
+  onSearchButtonPress?: (text: string) => void
+  onChangeText?: (text: string) => void
   onEndReached: () => void
-  isRequesting: boolean
+  isLoading: boolean
 }
 
 const Component: React.FC<ComponentProps> = ({
   items,
   onPress,
   searchText,
+  onSearchButtonPress,
   onChangeText,
   onEndReached,
-  isRequesting,
+  isLoading,
 }) => {
+  const searchBarRef = useRef<SearchBar | null>(null)
   const styles = useStyles()
 
   const renderItem = useCallback<ListRenderItem<Repository>>(
@@ -61,21 +58,24 @@ const Component: React.FC<ComponentProps> = ({
       <SearchBar
         placeholder="Search"
         text={searchText}
+        onSearchButtonPress={(text) => {
+          searchBarRef.current?.unFocus()
+          onSearchButtonPress?.(text)
+        }}
         onChangeText={onChangeText}
         style={styles.searchBar}
+        ref={searchBarRef}
       />
     )
-  }, [onChangeText, searchText, styles])
+  }, [onChangeText, onSearchButtonPress, searchText, styles.searchBar])
 
   const ListFooterComponent = useMemo(() => {
     return (
       <SafeAreaView edges={['bottom']}>
-        <View style={styles.footer}>
-          {isRequesting && <ActivityIndicator />}
-        </View>
+        <View style={styles.footer}>{isLoading && <ActivityIndicator />}</View>
       </SafeAreaView>
     )
-  }, [isRequesting, styles])
+  }, [isLoading, styles])
 
   return (
     <FlatList
@@ -94,6 +94,9 @@ const Component: React.FC<ComponentProps> = ({
 const Container: React.FC<Props> = (props) => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
+  const [keyword, setKeyword] = useState<string>('')
+
+  const { items, loadMore, isLoading, error } = useSearchRepository(keyword)
 
   const onPress = useCallback(
     (repository: Repository) => {
@@ -102,32 +105,30 @@ const Container: React.FC<Props> = (props) => {
     [navigation],
   )
 
-  const [searchText, setSearchText] = useState<string>('')
-
-  const onChangeText = useCallback(
-    (text: string) => {
-      setSearchText(text)
-      dispatch(fetchRepositories({ keyword: text }))
-    },
-    [dispatch],
-  )
+  const onSearchButtonPress = useCallback((text: string) => {
+    setKeyword(text)
+  }, [])
 
   const onEndReached = useCallback(() => {
-    dispatch(fetchRepositoriesMore())
-  }, [dispatch])
+    loadMore()
+  }, [loadMore])
 
-  const items: Repository[] = useSelector(selectRepositoryItems)
-  const isRequesting = useSelector(selectRepositoryIsRequesting)
+  useEffect(() => {
+    if (error instanceof Error) {
+      dispatch(enqueueToast({ message: error.message }))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error])
 
   return (
     <Component
       {...props}
       items={items}
       onPress={onPress}
-      searchText={searchText}
-      onChangeText={onChangeText}
+      searchText={keyword}
+      onSearchButtonPress={onSearchButtonPress}
       onEndReached={onEndReached}
-      isRequesting={isRequesting}
+      isLoading={isLoading}
     />
   )
 }
