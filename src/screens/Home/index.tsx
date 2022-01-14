@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   ActivityIndicator,
   FlatList,
@@ -15,17 +15,11 @@ import { Repository } from '@/api/github/Repository'
 import { RepItem } from './RepItem'
 import { ItemSeparator } from '@/components/List/Separator'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useDispatch, useSelector } from 'react-redux'
-import {
-  fetchRepositories,
-  fetchRepositoriesMore,
-} from '@/redux/modules/repository/actions'
-import {
-  selectRepositoryIsRequesting,
-  selectRepositoryItems,
-} from '@/redux/modules/repository/selectors'
+import { useDispatch } from 'react-redux'
 import { makeStyles } from 'react-native-swag-styles'
 import { COLOR } from '@/CONSTANTS/COLOR'
+import { useSearchRepository } from './hooks/useSearchRepository'
+import { enqueueToast } from '@/redux/modules/toast/actions'
 
 type Props = {}
 type ComponentProps = Props & {
@@ -35,6 +29,7 @@ type ComponentProps = Props & {
   onChangeText: (text: string) => void
   onEndReached: () => void
   isRequesting: boolean
+  searchBarRef: React.LegacyRef<SearchBar> | undefined
 }
 
 const Component: React.FC<ComponentProps> = ({
@@ -44,6 +39,7 @@ const Component: React.FC<ComponentProps> = ({
   onChangeText,
   onEndReached,
   isRequesting,
+  searchBarRef,
 }) => {
   const styles = useStyles()
 
@@ -63,9 +59,10 @@ const Component: React.FC<ComponentProps> = ({
         text={searchText}
         onChangeText={onChangeText}
         style={styles.searchBar}
+        ref={searchBarRef}
       />
     )
-  }, [onChangeText, searchText, styles])
+  }, [onChangeText, searchBarRef, searchText, styles])
 
   const ListFooterComponent = useMemo(() => {
     return (
@@ -94,40 +91,44 @@ const Component: React.FC<ComponentProps> = ({
 const Container: React.FC<Props> = (props) => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
+  const [keyword, setKeyword] = useState<string>('')
+  const searchBarRef = useRef<SearchBar | null>(null)
+
+  const { items, loadMore, isLoading, error } = useSearchRepository(keyword)
 
   const onPress = useCallback(
     (repository: Repository) => {
+      searchBarRef.current?.unFocus()
       navigation.navigate(MainName.Detail, { repository: repository })
     },
     [navigation],
   )
 
-  const [searchText, setSearchText] = useState<string>('')
-
-  const onChangeText = useCallback(
-    (text: string) => {
-      setSearchText(text)
-      dispatch(fetchRepositories({ keyword: text }))
-    },
-    [dispatch],
-  )
+  const onChangeText = useCallback((text: string) => {
+    setKeyword(text)
+  }, [])
 
   const onEndReached = useCallback(() => {
-    dispatch(fetchRepositoriesMore())
-  }, [dispatch])
+    loadMore()
+  }, [loadMore])
 
-  const items: Repository[] = useSelector(selectRepositoryItems)
-  const isRequesting = useSelector(selectRepositoryIsRequesting)
+  useEffect(() => {
+    if (error instanceof Error) {
+      dispatch(enqueueToast({ message: error.message }))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error])
 
   return (
     <Component
       {...props}
       items={items}
       onPress={onPress}
-      searchText={searchText}
+      searchText={keyword}
       onChangeText={onChangeText}
       onEndReached={onEndReached}
-      isRequesting={isRequesting}
+      isRequesting={isLoading}
+      searchBarRef={searchBarRef}
     />
   )
 }
